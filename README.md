@@ -5,4 +5,4 @@
 
 **Стек:** Python, FastAPI, Aiogram, Docker Compose 
 
-**Ссылка на Miro:** https://www.figma.com/board/ZxNY2YHhyQlSJfMvplSCaC/Weather_bot?node-id=0-1&t=QbzbjV9p8v59fKR2-1
+**Ссылка на доску:** https://www.figma.com/board/ZxNY2YHhyQlSJfMvplSCaC/Weather_bot?node-id=0-1&t=QbzbjV9p8v59fKR2-1
