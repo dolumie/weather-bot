@@ -1,0 +1,8 @@
+aiogram
+python-decouple
+fastapi
+unicorn
+sqlalchemy
+pymysql
+aiohttp
+redis
