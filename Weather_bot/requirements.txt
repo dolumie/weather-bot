@@ -1,8 +1,7 @@
-aiogram
-python-decouple
-fastapi
-unicorn
-sqlalchemy
-pymysql
-aiohttp
-redis
+aiogram==3.0.0
+python-decouple==3.8
+fastapi==0.100.0
+uvicorn==0.21.1
+redis==4.6.0 
+pydantic==2.6.4  
+pydantic-core==2.16.3
