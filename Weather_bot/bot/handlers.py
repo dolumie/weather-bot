@@ -6,6 +6,7 @@ from aiogram.types import (
     ReplyKeyboardMarkup,
     KeyboardButton,
 )
+from services.weather_api import get_wether
 
 
 router = Router()
@@ -27,5 +28,13 @@ async def weather(message: types.Message):
             "Пожалуйста, нажмите кнопку ниже, чтобы отправить ваше местоположение:",
             reply_markup=location_keyboard
         )
-        #await message.answer("weather")
+@router.message(F.location)
+async def handle_location(message: Message):
+    lat = message.location.latitude
+    lon = message.location.longitude
+    answer = await get_wether({"lat":lat,"lon":lon})
+    #обработка
+    print(answer)
+    await message.answer(f"Температура: {answer['main']['temp']}°C")
+    
     
