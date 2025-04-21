@@ -1,45 +1,48 @@
 {
     "coord": {
-        "lon": -118.2437,
-        "lat": 34.0522
+        "lon": 121.4581,
+        "lat": 31.2222
     },
     "weather": [
         {
-            "id": 800,
-            "main": "Clear",
-            "description": "ясно",
-            "icon": "01n"
+            "id": 520,
+            "main": "Rain",
+            "description": "небольшой проливной дождь",
+            "icon": "09d"
         }
     ],
     "base": "stations",
     "main": {
-        "temp": 12.87,
-        "feels_like": 12.25,
-        "temp_min": 11.67,
-        "temp_max": 14.14,
-        "pressure": 1015,
-        "humidity": 78,
-        "sea_level": 1015,
-        "grnd_level": 996
+        "temp": 20.92,
+        "feels_like": 21.23,
+        "temp_min": 20.92,
+        "temp_max": 20.92,
+        "pressure": 1007,
+        "humidity": 83,
+        "sea_level": 1007,
+        "grnd_level": 1007
     },
-    "visibility": 10000,
+    "visibility": 8000,
     "wind": {
-        "speed": 4.12,
-        "deg": 250
+        "speed": 4,
+        "deg": 140
+    },
+    "rain": {
+        "1h": 1.37
     },
     "clouds": {
-        "all": 0
+        "all": 20
     },
-    "dt": 1744790060,
+    "dt": 1745221886,
     "sys": {
-        "type": 2,
-        "id": 2007097,
-        "country": "US",
-        "sunrise": 1744809607,
-        "sunset": 1744856688
+        "type": 1,
+        "id": 9659,
+        "country": "CN",
+        "sunrise": 1745183976,
+        "sunset": 1745231151
     },
-    "timezone": -25200,
-    "id": 5368361,
-    "name": "Лос-Анджелес",
+    "timezone": 28800,
+    "id": 1796236,
+    "name": "Шанхай",
     "cod": 200
 }

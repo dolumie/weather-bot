@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import json
 from datetime import datetime
 
-with open('weather2.json', 'r', encoding='utf-8') as file:
+with open('weather.json', 'r', encoding='utf-8') as file:
     weather_data = json.load(file)
 
 city = weather_data['name']
@@ -21,13 +21,13 @@ frames = []
 duration = 200
 
 if is_daytime:
-    background_path = 'backgrounds/sky_day.png'
+    background_path = 'assets/background/sky_day.png'
     animation_frames = [f'icons/sun/sun_{i}.png' for i in range(3)]
     element_size = (120, 120)
     element_pos = (50, 50)
     text_color = "black"
 else:
-    background_path = 'backgrounds/sky_night.png'
+    background_path = 'assets/background/sky_night.png'
     animation_frames = [f'icons/stars/star_{i}.png' for i in range(7)]
     element_size = (150, 150)
     element_pos = (100, 30)
@@ -40,7 +40,7 @@ for frame_path in animation_frames:
     frame.paste(element, element_pos, element)
 
     draw = ImageDraw.Draw(frame)
-    pixel_font = ImageFont.truetype('font/PixelizerBold.ttf', size=24)
+    pixel_font = ImageFont.truetype('assets/font/PixelizerBold.ttf', size=24)
 
     draw.text((200, 50), f"Город: {city}", font=pixel_font, fill=text_color)
     draw.text((200, 80), f"Погода: {description}", font=pixel_font, fill=text_color)
