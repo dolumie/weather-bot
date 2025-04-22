@@ -7,6 +7,7 @@ from aiogram.types import (
     KeyboardButton,
     BotCommand
 )
+import math
 from services.weather_api import get_wether
 from aiogram import Bot
 
@@ -15,8 +16,8 @@ router = Router()
 # @router.message(F.text)
 # async def handle_text(message:Message):
 #     await message.answer(message.text)
-    
-@router.message(F.text == "Узнать погоду" | Command("weather"))
+@router.message(Command("weather"))
+@router.message(F.text == "Узнать погоду")
 async def weather(message: types.Message):
         location_keyboard = ReplyKeyboardMarkup(
         keyboard=[
@@ -29,6 +30,9 @@ async def weather(message: types.Message):
             "Пожалуйста, нажмите кнопку ниже, чтобы отправить ваше местоположение:",
             reply_markup=location_keyboard
         )
+        
+        
+        
 @router.message(F.location)
 async def handle_location(message: Message):
     lat = message.location.latitude
@@ -36,14 +40,14 @@ async def handle_location(message: Message):
     answer = await get_wether({"lat":lat,"lon":lon})
     #обработка
     print(answer)
-    await message.answer(f"Температура: {answer['main']['temp']}°C")
+    await message.answer(f"Температура: {math.ceil(answer['main']['temp'])}°C")
     
     
     
 start_keyboard = ReplyKeyboardMarkup(
     keyboard=[
         [KeyboardButton(text="Узнать погоду")],
-        [KeyboardButton(text="Отправить местоположение", request_location=True)]
+        # [KeyboardButton(text="Отправить местоположение", request_location=True)]
     ],
     resize_keyboard=True,
 )
