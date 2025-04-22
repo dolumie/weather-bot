@@ -1,48 +1,44 @@
 {
     "coord": {
-        "lon": 121.4581,
-        "lat": 31.2222
+        "lon": 40,
+        "lat": 45
     },
     "weather": [
         {
-            "id": 520,
-            "main": "Rain",
-            "description": "небольшой проливной дождь",
-            "icon": "09d"
+            "id": 802,
+            "main": "Clouds",
+            "description": "переменная облачность",
+            "icon": "03d"
         }
     ],
     "base": "stations",
     "main": {
-        "temp": 20.92,
-        "feels_like": 21.23,
-        "temp_min": 20.92,
-        "temp_max": 20.92,
-        "pressure": 1007,
-        "humidity": 83,
-        "sea_level": 1007,
-        "grnd_level": 1007
+        "temp": 20.11,
+        "feels_like": 19.8,
+        "temp_min": 20.11,
+        "temp_max": 20.11,
+        "pressure": 1016,
+        "humidity": 62,
+        "sea_level": 1016,
+        "grnd_level": 1005
     },
-    "visibility": 8000,
+    "visibility": 10000,
     "wind": {
-        "speed": 4,
-        "deg": 140
-    },
-    "rain": {
-        "1h": 1.37
+        "speed": 1.26,
+        "deg": 5,
+        "gust": 1.25
     },
     "clouds": {
-        "all": 20
+        "all": 27
     },
-    "dt": 1745221886,
+    "dt": 1745316309,
     "sys": {
-        "type": 1,
-        "id": 9659,
-        "country": "CN",
-        "sunrise": 1745183976,
-        "sunset": 1745231151
+        "country": "RU",
+        "sunrise": 1745288601,
+        "sunset": 1745338398
     },
-    "timezone": 28800,
-    "id": 1796236,
-    "name": "Шанхай",
+    "timezone": 10800,
+    "id": 542415,
+    "name": "Краснодарский край",
     "cod": 200
 }

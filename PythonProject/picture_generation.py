@@ -1,70 +1,192 @@
 from PIL import Image, ImageDraw, ImageFont
 import json
+import os
 from datetime import datetime
 
-with open('weather.json', 'r', encoding='utf-8') as file:
-    weather_data = json.load(file)
+# Пути
+BACKGROUND_PATH = 'assets/background.png'
+ICONS_DIR = 'assets/weather_icons'
+FONT_PATH = 'assets/font/PixelizerBold.ttf'
 
-city = weather_data['name']
-weather_condition = weather_data['weather'][0]['main']
-description = weather_data['weather'][0]['description']
-temp = weather_data['main']['temp']
-humidity = weather_data['main']['humidity']
-wind_speed = weather_data['wind']['speed']
-sunrise = datetime.fromtimestamp(weather_data['sys']['sunrise'])
-sunset = datetime.fromtimestamp(weather_data['sys']['sunset'])
-current_time = datetime.now()
+# Внешний вид
+TEXT_COLOR = (96,41,131)
+ICON_TARGET_SIZE = (200, 200)
+TEXT_FONT_SIZE = 54
+TEXT_POSITION_RATIO = 2.0
 
-is_daytime = sunrise <= current_time <= sunset
+# На случай, если нет данных в словаре погодных условий
+DEFAULT_ADVICE = {
+    'day': "Хорошего дня!",
+    'night': "Спокойной ночи!"
+}
 
-frames = []
-duration = 200
+# Словарь погодных условий
+WEATHER_MAP = {
+    "Clear": {
+        "day_icon": "sunny.png",
+        "night_icon": "clear_moon.png",
+        "advice_night": "Загляните в небо." + "\n" + "Там красиво.",
+        "advice_day": "Не забудьте" + "\n" + "солнечные очки!"
+    },
+    "Clouds": {
+        "icon": "cloudy.png",
+        "advice": "Возьмите с собой" + "\n" + "хорошее настроение."
+    },
+    "Partly Cloudy": {
+        "day_icon": "partly_cloudy.png",
+        "night_icon": "partly_cloudy_night.png",
+        "advice_day": "На всякий случай" + "\n" + "захватите кофту.",
+        "advice_night": "Уютной ночи" + "\n" + "и тёплых мыслей."
+    },
+    "Fog": {
+        "icon": "fog.png",
+        "advice": "Будьте внимательны" + "\n"+ "на дорогах."
+    },
+    "Rain": {
+        "icon": "rain.png",
+        "advice": "Не забудьте зонтик!"
+    },
+    "Snow": {
+        "icon": "snow.png",
+        "advice": "Одевайтесь тепло!"
+    },
+    "Thunderstorm": {
+        "icon": "thunderstorm.png",
+        "advice": "Оставайтесь дома," +"\n" +"берегите себя."
+    },
+    "Wind": {
+        "icon": "windy.png",
+        "advice": "Не переохладитесь."
+    },
+}
 
-if is_daytime:
-    background_path = 'assets/background/sky_day.png'
-    animation_frames = [f'icons/sun/sun_{i}.png' for i in range(3)]
-    element_size = (120, 120)
-    element_pos = (50, 50)
-    text_color = "black"
-else:
-    background_path = 'assets/background/sky_night.png'
-    animation_frames = [f'icons/stars/star_{i}.png' for i in range(7)]
-    element_size = (150, 150)
-    element_pos = (100, 30)
-    text_color = "white"
+def generate_card(json_path: str, output_path: str) -> None:
+# Проверка наличия файлов
+    if not os.path.exists(json_path):
+        raise FileNotFoundError(f"Файл с данными о погоде не найден: {json_path}")
+    if not os.path.exists(BACKGROUND_PATH):
+        raise FileNotFoundError(f"Фоновое изображение не найдено: {BACKGROUND_PATH}")
+    if not os.path.exists(ICONS_DIR):
+        raise FileNotFoundError(f"Папка с иконками не найдена: {ICONS_DIR}")
+# Загрузка и проверка данных
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
 
-for frame_path in animation_frames:
-    frame = Image.open(background_path)
+    if 'weather' not in data or not data['weather']:
+        raise KeyError("Отутствуют данные о погоде в JSON файле")
 
-    element = Image.open(frame_path).resize(element_size)
-    frame.paste(element, element_pos, element)
+    weather = data['weather'][0]
+    main_condition = weather['main']
+    description = weather['description'].lower()
 
-    draw = ImageDraw.Draw(frame)
-    pixel_font = ImageFont.truetype('assets/font/PixelizerBold.ttf', size=24)
+# Определение времени суток
+    if 'sys' not in data or 'sunrise' not in data['sys'] or 'sunset' not in data['sys']:
+        raise KeyError("Отсутствуют данные о времени восхода/заката")
 
-    draw.text((200, 50), f"Город: {city}", font=pixel_font, fill=text_color)
-    draw.text((200, 80), f"Погода: {description}", font=pixel_font, fill=text_color)
-    draw.text((200, 110), f"Температура: {temp}°C", font=pixel_font, fill=text_color)
-    draw.text((200, 140), f"Влажность: {humidity}%", font=pixel_font, fill=text_color)
-    draw.text((200, 170), f"Ветер: {wind_speed} м/с", font=pixel_font, fill=text_color)
+    sunrise = datetime.fromtimestamp(data['sys']['sunrise'])
+    sunset = datetime.fromtimestamp(data['sys']['sunset'])
+    current_time = datetime.now()
+    is_daytime = sunrise <= current_time <= sunset
+    time_key = 'day' if is_daytime else 'night'
 
-    time_indicator = "День" if is_daytime else "Ночь"
-    draw.text((200, 200), f"Время: {time_indicator}", font=pixel_font, fill=text_color)
+# Обработка частичной облачности. Это особый случай
+    if main_condition == 'Clouds' and 'переменная' in description:
+        main_condition = 'Partly Cloudy'
 
-    frames.append(frame)
+# Выбор контента для карточки
+    advice = DEFAULT_ADVICE[time_key]
+    icon_path = None
 
-output_filename = 'output/weather_day.gif' if is_daytime else 'output/weather_night.gif'
-frames[0].save(
-    output_filename,
-    save_all=True,
-    append_images=frames[1:],
-    duration=duration,
-    loop=0,
-    optimize=True
+    if main_condition in WEATHER_MAP:
+        condition_info = WEATHER_MAP[main_condition]
+        
+# Выбор текста совета
+        if 'advice' in condition_info:
+            advice = condition_info['advice']
+        else:
+            advice_key = f"advice_{time_key}"
+            advice = condition_info.get(advice_key, DEFAULT_ADVICE[time_key])
+        
+# Выбор иконки
+        if 'icon' in condition_info:
+            icon_file = condition_info['icon']
+        else:
+            icon_key = f"{time_key}_icon"
+            icon_file = condition_info.get(icon_key)
+        
+        if icon_file:
+            icon_path = os.path.join(ICONS_DIR, icon_file)
+            if not os.path.exists(icon_path):
+                icon_path = None
+
+# Создание изображения
+    try:
+# Загрузка фона
+        background = Image.open(BACKGROUND_PATH).convert('RGBA')
+        
+# Добавление иконки
+        if icon_path and os.path.exists(icon_path):
+            icon = Image.open(icon_path).convert('RGBA')
+            
+# Машстабирование
+            icon.thumbnail(ICON_TARGET_SIZE, Image.Resampling.LANCZOS)
+            
+# Создание слоя для иконки
+            icon_layer = Image.new('RGBA', background.size, (0, 0, 0, 0))
+            icon_position = (
+                (background.width - icon.width) // 5,
+                (background.height - icon.height) // 3
+            )
+            icon_layer.paste(icon, icon_position, icon)
+            
+# Объединение с фоном
+            background = Image.alpha_composite(background, icon_layer)
+
+# Добавление текста
+        draw = ImageDraw.Draw(background)
+        
+# Загрузка шрифта
+        try:
+            font = ImageFont.truetype(FONT_PATH, size=TEXT_FONT_SIZE)
+        except IOError:
+            print("Не удалось загрузить шрифт")
+            font = ImageFont.load_default()
+
+# Расчет размеров текста
+        try:
+            text_bbox = draw.textbbox((0, 0), advice, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+        except AttributeError:
+            text_width, text_height = draw.textsize(advice, font=font)
+
+# Позиционирование текста
+        text_x = (background.width - text_width) // 2
+        text_y = (background.height - text_height) // TEXT_POSITION_RATIO
+
+# Текст 
+        draw.text(
+            (text_x, text_y),
+            advice,
+            font=font,
+            fill=TEXT_COLOR,
 )
 
-print(f"Анимация сохранена как '{output_filename}'")
+# Сохранение
+        os.makedirs(os.path.dirname(output_path) or '.', exist_ok=True)
+        background.save(output_path)
+        print(f"Карточка успешно сохранена: {output_path}")
 
-static_output = 'output/weather_static.png'
-frames[0].save(static_output)
-print(f"Статичное изображение сохранено как '{static_output}'")
+    except Exception as e:
+        raise ValueError(f"Ошибка при обработке изображения: {e}")
+
+
+if __name__ == '__main__':
+    try:
+        generate_card(
+            json_path='weather.json',
+            output_path='output/weather_card.png'
+        )
+    except Exception as e:
+        print(f"Ошибка при создании карточки: {str(e)}")
+        exit(1)
