@@ -10,6 +10,7 @@ from aiogram.types import (
 import math
 from services.weather_api import get_wether
 from aiogram import Bot
+from database.crud import save_user_location
 
 router = Router()
 
@@ -30,13 +31,13 @@ async def weather(message: types.Message):
             "Пожалуйста, нажмите кнопку ниже, чтобы отправить ваше местоположение:",
             reply_markup=location_keyboard
         )
-        
-        
-        
+              
 @router.message(F.location)
 async def handle_location(message: Message):
     lat = message.location.latitude
     lon = message.location.longitude
+    us_id=message.from_user.id
+    await save_user_location(user_id=us_id,latitude=lat,longitude=lon)
     answer = await get_wether({"lat":lat,"lon":lon})
     #обработка
     print(answer)
