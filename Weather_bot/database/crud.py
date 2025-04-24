@@ -7,4 +7,4 @@ async def save_user_location(user_id: int, latitude: float, longitude: float):
         INSERT INTO users (user_id, lat, lon)
         VALUES ($1, $2, $3)
     ''', user_id, latitude, longitude)
-    await conn.close()
+        await conn.close()

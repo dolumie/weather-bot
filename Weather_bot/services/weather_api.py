@@ -6,7 +6,6 @@ async def get_wether(coord):
     coord["units"]= "metric"
     async with httpx.AsyncClient() as client:
         response = await client.get(f"https://api.openweathermap.org/data/2.5/weather",params=coord)
-        weather = response.json()
-        return weather
+        return response.json()
         
        

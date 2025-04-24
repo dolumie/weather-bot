@@ -5,12 +5,14 @@ from aiogram.filters import Command
 from aiogram.types import (
     ReplyKeyboardMarkup,
     KeyboardButton,
-    BotCommand
+    BotCommand,
+    BufferedInputFile
 )
-import math
 from services.weather_api import get_wether
 from aiogram import Bot
 from database.crud import save_user_location
+import json
+from bot.utils import generate_card
 
 router = Router()
 
@@ -40,8 +42,28 @@ async def handle_location(message: Message):
     await save_user_location(user_id=us_id,latitude=lat,longitude=lon)
     answer = await get_wether({"lat":lat,"lon":lon})
     #обработка
+    data = answer
+    with open("bot/temp/weather.json", "w", encoding="utf-8") as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
+    
+    generate_card(json_path='bot/temp/weather.json',
+                  output_path='bot/temp/output.png')
     print(answer)
-    await message.answer(f"Температура: {math.ceil(answer['main']['temp'])}°C")
+    with open("bot/temp/output.png", "rb") as file:
+        photo_data = file.read()
+    # Создаем BufferedInputFile
+    photo = BufferedInputFile(photo_data, filename="output.png")
+    # Отправляем фото
+    
+    city = answer["name"]
+    temperature = answer["main"]["temp"]
+    feels_like=answer["main"]["feels_like"]
+    humidity=answer["main"]["humidity"]
+    wind=answer["wind"]["speed"]
+    
+    caption = ( f"Погода в {city}\n🌡 Температура: {temperature}°C\n🤔 Ощущается как: {feels_like}°C\n💧 Влажность: {humidity}% \n💨 Ветер: {wind} м/с\n" )
+    await message.answer_photo(photo,caption=caption)
+    # await message.answer_photo(photo='bot/temp/output.png')
     
     
     
