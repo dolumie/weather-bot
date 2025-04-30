@@ -6,7 +6,9 @@ async def create_pool():
       password=config('PASSWORD'),
       database= config('DATABASE'),
       host= config('HOST'),
-      port= config('PORT')
+      port= config('PORT'),
+      max_inactive_connection_lifetime=300,  # закрывать неиспользуемые соединения через 5 мин
+      timeout=30  # таймаут ожидания соединения
     )
 
 async def create_table():
@@ -18,7 +20,8 @@ async def create_table():
                 user_id BIGINT,
                 lat FLOAT,
                 lon FLOAT,
-                req_time TIMESTAMP DEFAULT NOW()
+                req_time TIMESTAMP DEFAULT NOW(),
+                cityname Text
             )
         ''')
         await conn.close()
