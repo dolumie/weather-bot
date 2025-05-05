@@ -1,9 +1,14 @@
 TELEGRAM_BOT_TOKEN=ваш токкен бота
 WEATHER_API_KEY=API ключ к сервису OpenWeather 
 
-#данные для базы данных
-USER= логин порльзователя
-PASSWORD=пароль пользователя
-DATABASE=название базы данных
-HOST=хост
-PORT=номер порта
+#данные для базы данных  
+USER= логин порльзователя   (bot_user)
+PASSWORD=пароль пользователя (bot_password_123)
+DATABASE=название базы данных (weather_bot)
+HOST=хост (db)
+PORT=номер порта (5432)
+
+DATABASE_URL= ссылка на подключение к базе данных "postgresql://bot_user:bot_password_123@db:5432/weather_bot"
+
+PGADMIN_DEFAULT_EMAIL= элуктронная почта администратора admin@example.com
+PGADMIN_DEFAULT_PASSWORD= пароль администратора admin123
