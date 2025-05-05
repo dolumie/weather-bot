@@ -1,0 +1,9 @@
+TELEGRAM_BOT_TOKEN=ваш токкен бота
+WEATHER_API_KEY=API ключ к сервису OpenWeather 
+
+#данные для базы данных
+USER= логин порльзователя
+PASSWORD=пароль пользователя
+DATABASE=название базы данных
+HOST=хост
+PORT=номер порта
