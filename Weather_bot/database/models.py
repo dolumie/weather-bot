@@ -15,13 +15,16 @@ async def create_pool() -> Optional[asyncpg.pool.Pool]:
     """
     try:
         pool = await asyncpg.create_pool(
-            user=config('USER'),
-            password=config('PASSWORD'),
-            database=config('DATABASE'),
-            host=config('HOST'),
-            port=config('PORT'),
-            max_inactive_connection_lifetime=300,
-            timeout=30
+           user=config('USER', default='bot_user'),  # Добавлены fallback значения
+            password=config('PASSWORD', default='bot_password_123'),
+            database=config('DATABASE', default='weather_bot'),
+            host=config('HOST', default='db'),  # Для Docker используем 'db'
+            port=config('PORT', default=5432, cast=int),
+            ssl=False,  # Для локальной БД не требуется
+            min_size=1,  # Минимальное количество подключений
+            max_size=5,  # Максимальное количество подключений
+            command_timeout=30,  # Таймаут запросов
+            max_inactive_connection_lifetime=300
         )
         return pool
     except (asyncpg.PostgresError, Exception) as e:

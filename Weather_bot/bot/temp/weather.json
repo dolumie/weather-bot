@@ -1,7 +1,7 @@
 {
     "coord": {
-        "lon": 82.8878,
-        "lat": 54.9833
+        "lon": 82.9047,
+        "lat": 54.9896
     },
     "weather": [
         {
@@ -13,30 +13,30 @@
     ],
     "base": "stations",
     "main": {
-        "temp": 14.71,
-        "feels_like": 13.18,
-        "temp_min": 14.71,
-        "temp_max": 14.71,
+        "temp": 15.75,
+        "feels_like": 14.24,
+        "temp_min": 15.75,
+        "temp_max": 15.75,
         "pressure": 1004,
-        "humidity": 36,
+        "humidity": 33,
         "sea_level": 1004,
-        "grnd_level": 986
+        "grnd_level": 987
     },
     "visibility": 10000,
     "wind": {
-        "speed": 2,
-        "deg": 270
+        "speed": 4,
+        "deg": 310
     },
     "clouds": {
         "all": 0
     },
-    "dt": 1746417039,
+    "dt": 1746424151,
     "sys": {
         "type": 1,
         "id": 8958,
         "country": "RU",
-        "sunrise": 1746398411,
-        "sunset": 1746454203
+        "sunrise": 1746398405,
+        "sunset": 1746454200
     },
     "timezone": 25200,
     "id": 1541618,
